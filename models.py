@@ -1,12 +1,9 @@
 from mongoengine import Document, StringField, EmailField, DateTimeField
 from pydantic import BaseModel
-import uuid 
 from datetime import datetime
 
-id = uuid.uuid4() 
-
 class Users(Document):
-    user_id = StringField(default=id.hex, primary_key=True)
+    user_id = StringField(primary_key=True)
     name = StringField(required=True)
     email = EmailField(required=True, unique=True)
     password = StringField(required=True)
@@ -14,7 +11,7 @@ class Users(Document):
     updated_at = DateTimeField(default=datetime.utcnow)
 
 class Contacts(Document):
-    contact_id = StringField(default=id.hex, primary_key=True)
+    contact_id = StringField(primary_key=True)
     name = StringField(required=True)
     email = EmailField(required=True, unique=True)
     phone = StringField(required=True, unique=True)

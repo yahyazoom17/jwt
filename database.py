@@ -18,15 +18,14 @@ def saveUserToDB(userdata):
         all_users = Users.objects()
         for user in all_users:
             if user.email == userdata["email"]:
-                #raise HTTPException(status_code=400, detail="Email already registered!")
                 return {"message":"Email already registered!"}
-        user = Users(name=userdata["name"], email=userdata["email"], password=userdata["password"])
-        user.save()
+        new_user = Users(user_id=uuid.uuid4().hex, name=userdata["name"], email=userdata["email"], password=userdata["password"])
+        new_user.save()
         return {"message": "User registered successfully!"}
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print("User saved to database.")
 
 def getUserFromDB(userdata):
@@ -41,7 +40,7 @@ def getUserFromDB(userdata):
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print("User logged in successfully!")
 
 def getUserContacts(user):
@@ -59,7 +58,7 @@ def getUserContacts(user):
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print(f"{user}'s contacts retrieved successfully!")
 
 def getUserContactByID(user, contact_id):
@@ -78,7 +77,7 @@ def getUserContactByID(user, contact_id):
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print(f"{user}'s contacts retrieved successfully!")
 
 def saveUserContacts(username, userdata):
@@ -90,17 +89,17 @@ def saveUserContacts(username, userdata):
                 for contact in all_contacts:
                     if contact["email"] == userdata["email"] or contact["phone"] == userdata["phone"]:
                         return {"message": "Email or phone number already exists!"}
-                contact = Contacts(user=username, name=userdata["name"], email=userdata["email"], phone=userdata["phone"])
-                contact.save()
+                new_contact = Contacts(contact_id=uuid.uuid4().hex, user=username, name=userdata["name"], email=userdata["email"], phone=userdata["phone"]).save()
+                new_contact.save()
                 return {
-            "message":"Contact saved successfully!",
-            "contact":userdata,
-        }
+                                "message":"Contact saved successfully!",
+                                "contact":userdata,
+                                }
         return {"message": "User not found!",}
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print(f"{user}'s contact saved successfully!")
 
 def updateUserContacts(username, contact_id, userdata):
@@ -121,7 +120,7 @@ def updateUserContacts(username, contact_id, userdata):
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print(f"{username}'s contact saved successfully!")
 
 def deleteUserContacts(username, contact_id):
@@ -142,5 +141,5 @@ def deleteUserContacts(username, contact_id):
     except Exception as e:
         print(e)
     finally:
-        disconnect(alias="testdb")
+        disconnect(alias=db_name)
         print(f"{username}'s contact deleted successfully!")

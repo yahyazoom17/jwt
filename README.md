@@ -126,4 +126,3 @@ fastapi-jwt/
 - Tokens expire after 20 minutes by default
 - Raw passwords are currently stored in the database - in a production environment, implement proper password hashing
 - JWT secret is generated using `secrets.token_hex(16)` - consider using a persistent secret in production
-- 
